@@ -50,6 +50,7 @@ def send_via_smtp(subject, html_body, plain_body, recipients):
     """
     import os
     import smtplib
+    import ssl
     from email.mime.multipart import MIMEMultipart
     from email.mime.text import MIMEText
 
@@ -69,7 +70,7 @@ def send_via_smtp(subject, html_body, plain_body, recipients):
     msg.attach(MIMEText(html_body, "html"))
 
     with smtplib.SMTP(host, port) as server:
-        server.starttls()
+        server.starttls(context=ssl.create_default_context())
         if user and password:
             server.login(user, password)
         server.sendmail(sender, recipients, msg.as_string())
